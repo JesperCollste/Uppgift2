@@ -1,11 +1,10 @@
 import csv
 import os
-import locale
 from collections import Counter
 
 def analyze_sales_data(filename):
     products = {}
-    quantities = Counter()  # To keep track of the number of times each product is sold
+    quantities = Counter()  # Hur många gånger varje produkt har blivit såld
 
     with open(filename, 'r') as file:
         reader = csv.DictReader(file)
@@ -13,30 +12,29 @@ def analyze_sales_data(filename):
             product = row['Product']
             sales = float(row['Sales'])
             
-            # Track total sales per product
             if product in products:
                 products[product] += sales
             else:
                 products[product] = sales
             
-            # Track the count of each product sold
+            # count av alla produkter sålda
             quantities[product] += 1
     
-    
+    #TODO: Hitta den mest sålda produkten (TIPS! Använd Counter från collections)
     most_sold_product = quantities.most_common(1)[0]  # (product, count)
     
-   
+    # Hitta den mest lukrativa produkten
     most_lucrative_product = max(products, key=products.get)
     
-
+    # Genomsnittlig försäljning per produkt
     average_sales = sum(products.values()) / len(products)
 
-    print(f"Mest sålda produkt: \"{most_sold_product[0]}\", Antal: {most_sold_product[1]}")
-    print(f"Mest lukrativa produkt: \"{most_lucrative_product}\" med försäljning på {locale.currency(products[most_lucrative_product], grouping=True)}")
-    print(f"Genomsnittlig försäljning per produkt: {locale.currency(average_sales, grouping=True)}")
+    # printar ut allting 
+    print(f"Mest sålda produkt: \"{most_sold_product[0]}\", Antal: {most_sold_product[1]}")  #FIXME: Redovisa mest sålda produkt här
+    print(f"Mest lukrativa produkt: \"{most_lucrative_product}\" med försäljning på {products[most_lucrative_product]:,.2f} kr")
+    print(f"Genomsnittlig försäljning per produkt: {average_sales:,.2f} kr")
 
-
-locale.setlocale(locale.LC_ALL, 'sv_SE.UTF-8')
 
 os.system('cls')
 analyze_sales_data('sales_data.csv')
+
